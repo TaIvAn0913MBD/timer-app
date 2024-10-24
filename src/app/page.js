@@ -1,95 +1,72 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
 
-export default function Home() {
+import { useEffect, useState } from "react";
+
+const Page = () => {
+  const [timer, setTimer] = useState();
+  const [counter, setCounter] = useState(5);
+  const [laps, setLaps] = useState([]);
+  const addTime = () => {
+    const date = new Date();
+    setTimer(date.toLocaleTimeString());
+  };
+  const addCounter = () => {
+    return setCounter((prev) => prev + 1);
+  };
+  const add5ToCounter = () => {
+    setCounter((prev) => prev + 5);
+  };
+  const add30ToCounter = () => {
+    setCounter((prev) => prev + 30);
+  };
+  const addLap = () => {
+    setLaps([...laps, FormatTime(minuts) + ":" + FormatTime(sec)]);
+  };
+  console.log(laps);
+  const sec = counter % 60;
+  const minuts = Math.floor(counter / 60);
+  const FormatTime = (time) => {
+    if (time <= 9) {
+      return `0` + time;
+    } else {
+      return time;
+    }
+  };
+  useEffect(() => {
+    const interval = setInterval(addCounter, 1000);
+    return () => clearInterval(interval);
+  }, []);
+  setInterval(addTime, 1000);
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.js</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+    <div className="HTML">
+      <div className="InnerDiv">
+        <h1>Time is: {timer}</h1>
+        <h1>
+          Elipse time is min: {FormatTime(minuts)} sec: {FormatTime(sec)}
+        </h1>
+        <div className="outerDiv">
+          <button onClick={() => add5ToCounter()} className="button">
+            Add 5 sec
+          </button>
+          <button onClick={() => add30ToCounter()} className="button">
+            Add 30 sec
+          </button>
+          <button onClick={() => addLap()} className="button">
+            Lap
+          </button>
         </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        <div className="Scroll">
+          {laps.map((item, index) => {
+            return (
+              <h1 key={index} className="Lap">
+                {item}
+              </h1>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
-}
+};
+export default Page;
